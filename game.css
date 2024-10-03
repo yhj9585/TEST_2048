@@ -1,0 +1,115 @@
+body {
+
+    background-color: rgb(255, 243, 220);
+}
+
+.topbar {
+    display:flex;
+    justify-content: space-between;
+}
+
+.title {
+    margin: 0px;
+    width: 300px;
+    height: 200px;
+    color: rgb(47, 17, 0);
+    font-size: 100px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 170px;
+    float: left;
+    font-style: normal;
+}
+
+.button {
+    position: relative;
+    height: 40px;
+    width: 70px;
+    top: 10px;
+    background-color: rgb(182, 168, 161);
+    font-style: normal;
+    text-align: center;
+    color: white;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.scorebox {
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between;
+    right: 100px;
+    place-items: center;
+}
+
+.score {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-style: normal;
+    padding-top:10px;
+    font-weight: 700;
+    font-size: 20px;
+    height: 130px;
+    width: 120px;
+    top: 15px;
+    right: 20px;
+    color:white;
+    background-color: rgb(182, 168, 161);
+}
+
+.tilebg {
+    display: flex;
+    margin-top: 20px;
+    height: 675px;
+    width: 675px;
+    background-color: rgb(182, 168, 161);
+    border-radius: 1%;
+    font-size: 0;
+}
+
+.container {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    height: 600px;
+    width: 600px;
+    gap: 15px;
+    padding: 15px;
+    grid-template-rows: 25% 25% 25% 25%;
+    grid-template-columns: 25% 25% 25% 25%;
+}
+
+.container2 {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    height: 600px;
+    width: 600px;
+    gap: 15px;
+    padding: 15px;
+    grid-template-rows: 25% 25% 25% 25%;
+    grid-template-columns: 25% 25% 25% 25%;
+}
+
+.bgblock {
+    width: 100%;
+    height: 100%;
+    border-radius: 5%;
+    background-color: rgb(217, 201, 191);
+}
+
+.bgblock2 {
+    width: 100%;
+    height: 100%;
+    border-radius: 5%;
+    background-color: rgba(255, 255, 255, 0);
+    z-index: 10;
+    font-size: 100px;
+    font-style: normal;
+    font-weight: 900;
+    color:white;
+    text-align: center;
+}
+

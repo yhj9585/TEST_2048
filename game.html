@@ -1,0 +1,330 @@
+<!doctype html>
+
+<html lang="en-US">
+  <head>
+    <link rel="stylesheet" href="game.css" />
+    <meta charset="utf-8" />
+    <title>Hello!!!</title>
+  </head>
+
+  <body>
+    <var class="topbar">
+        <p class="title">2048</p>
+
+        <var class="scorebox">
+            <var class="score">
+                <var>score</var>
+                <var id="scoretext">000000</var>
+                <var>best</var>
+                <var>100000</var>
+            </var>
+            <var class="button" onclick="resetmap()">
+                <p class="buttontext">Reset</p>
+            </var>
+        </var>
+    </var>
+
+    <var class="tilebg" id="tilebg">
+        <var class="container2" id="container2"></var>
+        <var class="container" id="container"></var>
+    </var>
+
+    <var class="button2" > 
+        <button onclick="buttoncall(2)">move up</button>
+        <br>
+        <button onclick="buttoncall(1)">move left</button>
+        <button onclick="buttoncall(0)">move right</button>
+        <br>
+        <button onclick="buttoncall(3)">move down</button>
+
+        <br>
+        <button onclick="randnewtile()">new</button>
+
+    </var>
+
+  </body>
+
+
+  <script>
+    for(i = 0; i < 16; i++) {
+        const bgtile = document.getElementById('container');
+        bgtile.insertAdjacentHTML("beforeend","<var class='bgblock' id='tile"+i+"'></var>");
+    }
+    for(i = 0; i < 16; i++) {
+        const bgtile2 = document.getElementById('container2');
+        bgtile2.insertAdjacentHTML("beforeend","<var class='bgblock2' id='tile2_"+i+"'></var>");
+    }
+
+    class tile {
+        constructor(num) {
+            this.num = num;
+            this.added = 0;
+        }
+    }
+    
+    function tileprint() {
+        for (i = 0; i < 4; i++) {
+            console.log(i, tilemap[i][0], tilemap[i][1], tilemap[i][2], tilemap[i][3])
+        }
+    }
+
+    var tilecolor = ["rgb(254,222,178)", "rgb(250,214,214)", "rgb(250,189,189)","rgb(248,159,161)","rgb(148,101,76)"]
+
+    function tiledraw() {
+        for (i = 0; i < 4; i++) {
+            for (j = 0; j < 4; j++) {
+                var index = i*4 + j;
+                var biddrawn = "tile2_"+index;
+                const drawn = document.getElementById(biddrawn);
+
+                if (drawn) {
+                    drawn.style.backgroundColor = "rgba(255, 255, 255, 0)"
+                    drawn.innerHTML = ""
+                }
+
+                if (tilemap[i][j] != 0) {
+                    var bid = "tile2_"+index;
+                    const drawable = document.getElementById(bid);
+                    console.log(bid)
+
+                    if (drawable) {
+                        drawable.style.backgroundColor = tilecolor[Math.log2(tilemap[i][j].num)-1];
+                        drawable.innerHTML = tilemap[i][j].num;
+                    }
+                }
+            }
+        }
+    }
+
+    function moving(type) {
+        for (i = 3; i >= 0; i--) {
+            switch (type) {
+                case 0:
+                    for (j = 2; j >= 0; j--) {
+                        if (tilemap[i][j] != 0) {
+                            var thistile = tilemap[i][j];
+                            var tilex = j;
+                            var tiley = i;
+
+                            tilemap[i][j] = 0;
+                            var blocked = 0;
+                            while (tilex < 3) {
+                                if (tilemap[tiley][tilex+1] != 0) { // other tile
+                                    if (tilemap[tiley][tilex+1].num == thistile.num && tilemap[tiley][tilex+1].added == 0) {
+                                        //add
+                                        blocked = 1;
+                                        tilemap[tiley][tilex+1].num += thistile.num;
+                                        tilemap[tiley][tilex+1].added = 1;
+                                        score += tilemap[tiley][tilex+1].num*2
+                                        console.log(score, "score")
+                                        console.log(tilemap[tiley][tilex+1].num,"added");
+                                        break;
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                                else {
+                                    nonadded = 0;
+                                }
+                                tilex++;
+                            }
+                            if (blocked == 0) {
+                                tilemap[tiley][tilex] = thistile;
+                            }
+                        }
+                    }
+                    break;
+                case 1: 
+                    for (j = 1; j <= 3; j++) {
+                        if (tilemap[i][j] != 0) {
+                            var thistile = tilemap[i][j];
+                            var tilex = j;
+                            var tiley = i;
+
+                            tilemap[i][j] = 0;
+                            var blocked = 0;
+                            while (tilex > 0) {
+                                if (tilemap[tiley][tilex-1] != 0) { // other tile
+                                    if (tilemap[tiley][tilex-1].num == thistile.num && tilemap[tiley][tilex-1].added == 0) {
+                                        //add
+                                        blocked = 1;
+                                        tilemap[tiley][tilex-1].num += thistile.num;
+                                        tilemap[tiley][tilex-1].added = 1;
+                                        score += tilemap[tiley][tilex-1].num*2
+                                        console.log(score, "score")
+                                        console.log(tilemap[tiley][tilex-1].num,"added");
+                                        break;
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                                else {
+                                    nonadded = 0;
+                                }
+                                tilex--;
+                            }
+                            if (blocked == 0) {
+                                tilemap[tiley][tilex] = thistile;
+                            }
+                        }
+                    }
+                    break;
+                case 2: 
+                    for (j = 1; j <= 3; j++) {
+                        if (tilemap[j][i] != 0) {
+                            var thistile = tilemap[j][i];
+                            var tilex = i;
+                            var tiley = j;
+
+                            tilemap[j][i] = 0;
+                            var blocked = 0;
+                            while (tiley > 0) {
+                                if (tilemap[tiley-1][tilex] != 0) { // other tile
+                                    if (tilemap[tiley-1][tilex].num == thistile.num && tilemap[tiley-1][tilex].added == 0) {
+                                        //add
+                                        blocked = 1;
+                                        tilemap[tiley-1][tilex].num += thistile.num;
+                                        tilemap[tiley-1][tilex].added = 1;
+                                        score += tilemap[tiley-1][tilex].num*2
+                                        console.log(score, "score")
+                                        console.log(tilemap[tiley-1][tilex].num,"added");
+                                        break;
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                                else {
+                                    nonadded = 0;
+                                }
+                                tiley--;
+                            }
+                            if (blocked == 0) {
+                                tilemap[tiley][tilex] = thistile;
+                            }
+                        }
+                    }
+                    break;
+                case 3: 
+                    for (j = 2; j >= 0; j--) {
+                        if (tilemap[j][i] != 0) {
+                            var thistile = tilemap[j][i];
+                            var tilex = i;
+                            var tiley = j;
+
+                            tilemap[j][i] = 0;
+                            var blocked = 0;
+                            while (tiley < 3) {
+                                if (tilemap[tiley+1][tilex] != 0) { // other tile
+                                    if (tilemap[tiley+1][tilex].num == thistile.num && tilemap[tiley+1][tilex].added == 0) {
+                                        //add
+                                        blocked = 1;
+                                        tilemap[tiley+1][tilex].num += thistile.num;
+                                        tilemap[tiley+1][tilex].added = 1;
+                                        score += tilemap[tiley+1][tilex].num*2
+                                        console.log(score, "score")
+                                        console.log(tilemap[tiley+1][tilex].num,"added");
+                                        break;
+                                    }
+                                    else {
+                                        break;
+                                    }
+                                }
+                                else {
+                                    nonadded = 0;
+                                }
+                                tiley++;
+                            }
+                            if (blocked == 0) {
+                                tilemap[tiley][tilex] = thistile;
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+        for (i = 0; i < 4; i++) {
+            for (j = 0; j < 4; j++) {
+                console.log(1)
+                if (tilemap[i][j] != 0) {
+                    tilemap[i][j].added = 0;
+                }
+            }
+        }
+    }
+
+    function randnewtile() {
+        var randx = Math.floor(Math.random()*4)
+        var randy = Math.floor(Math.random()*4)
+        const num = (Math.floor(Math.random()*2)+1) *2
+
+        console.log(randx,randy,num)
+        let newtile = new tile(num);
+
+        var avail = 0
+        for (i = 0; i < 4; i++) {
+            for (j = 0; j < 4; j++) {
+                if (tilemap[i][j] == 0) {
+                    avail = 1
+                    break;
+                }
+            }
+        }
+        if (avail == 0) {
+            console.log("END")
+            return;
+        }
+
+        while(tilemap[randy][randx] != 0){
+            randx = Math.floor(Math.random()*4)
+            randy = Math.floor(Math.random()*4)
+            console.log(randx,randy,num)
+            if (tilemap[randy][randx] == 0) {
+                break;
+            }
+        }
+
+        tilemap[randy][randx] = newtile;
+        tiledraw()
+    }
+
+    function scoreupdate() {
+        const drawable = document.getElementById("scoretext");
+
+        if (drawable) {
+            drawable.innerHTML = score;
+        }
+    }
+
+    function buttoncall(type) {
+        moving(type)
+        tileprint()
+        randnewtile()
+        scoreupdate() 
+        tiledraw()
+    }
+
+    function resetmap() {
+        for (i = 0; i < 4; i++) {
+            for (j = 0; j < 4; j++) {
+                tilemap[i][j] = 0
+            }
+        }
+        randnewtile()
+        tiledraw()
+        score = 0
+        scoreupdate() 
+    }
+
+    //2048
+    var score = 0
+    var tilemap = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+    console.log(score,"score")
+    randnewtile()
+    tileprint()
+    tiledraw()
+
+    </script>
+</html>
